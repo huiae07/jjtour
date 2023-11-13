@@ -1,0 +1,33 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    container_name: mysql
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./data/mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: tour
+      MYSQL_ROOT_PASSWORD: passowrd
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      TZ: Asia/Seoul
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+  redis:
+    image: redis:latest
+    container_name: jredis
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis/data:/data
+      - ./redis/conf/redis.conf:/usr/local/conf/redis.conf
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    restart: always
+    command: redis-server /usr/local/conf/redis.conf
